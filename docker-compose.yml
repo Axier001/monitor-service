@@ -1,0 +1,30 @@
+version: '3.8'
+
+services:
+  monitor_service:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: monitor-service:latest
+    container_name: monitor_service
+    environment:
+      - SERVER_URL=${SERVER_URL}
+      - LOG_FILE_PATH=${LOG_FILE_PATH}
+      - INTERVAL_SECONDS=${INTERVAL_SECONDS}
+    volumes:
+      - /home/administrador/monitor_logs:/var/log/monitor
+    networks:
+      - monitor-net
+    restart: always
+
+networks:
+  monitor-net:
+    driver: bridge
+
+volumes:
+  monitor_logs:
+    driver: local
+    driver_opts:
+      type: none
+      device: /home/administrador/monitor_logs
+      o: bind
